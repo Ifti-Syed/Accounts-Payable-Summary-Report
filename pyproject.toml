@@ -1,7 +1,7 @@
 [project]
 name = "custom_accounts_payable_report"
 authors = [
-    { name = "CVS HVAC", email = "iftikhar.hussain@cvshvac.com" }
+    { name = "Iftikhar Hussain Syed", email = "iftikhar.hussain@cvshvac.com" }
 ]
 description = "Custom Accounts Payable Summary report with PDC tracking for CVS HVAC"
 requires-python = ">=3.10"
@@ -15,6 +15,9 @@ dependencies = [
 [build-system]
 requires = ["flit_core >=3.4,<4"]
 build-backend = "flit_core.buildapi"
+
+[tool.bench.frappe-dependencies]
+frappe = ">=15.0.0,<16.0.0"
 
 [tool.bench.dev-dependencies]
 
