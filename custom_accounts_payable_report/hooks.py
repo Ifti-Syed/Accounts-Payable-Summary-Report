@@ -1,0 +1,6 @@
+app_name = "custom_accounts_payable_report"
+app_title = "Custom Accounts Payable Report"
+app_publisher = "CVS HVAC"
+app_description = "Custom Accounts Payable Summary report with PDC tracking"
+app_email = "iftikhar.hussain@cvshvac.com"
+app_license = "Proprietary"

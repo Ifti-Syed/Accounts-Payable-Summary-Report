@@ -1,0 +1,23 @@
+[project]
+name = "custom_accounts_payable_report"
+authors = [
+    { name = "CVS HVAC", email = "iftikhar.hussain@cvshvac.com" }
+]
+description = "Custom Accounts Payable Summary report with PDC tracking for CVS HVAC"
+requires-python = ">=3.10"
+readme = "README.md"
+license = { file = "license.txt" }
+dynamic = ["version"]
+dependencies = [
+    # "frappe~=15.0.0" # Installed and managed by bench.
+]
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.bench.dev-dependencies]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
