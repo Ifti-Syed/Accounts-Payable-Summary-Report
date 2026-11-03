@@ -5,6 +5,7 @@ from io import BytesIO
 
 import frappe
 from frappe import _
+from frappe.query_builder.functions import Sum
 from frappe.utils import flt, nowdate
 
 from erpnext.accounts.report.accounts_receivable_summary.accounts_receivable_summary import (
@@ -76,21 +77,21 @@ class CVSAccountsPayableSummaryWithPDCs(AccountsReceivableSummary):
 
 def get_pdc_issued_map(company=None):
 	"""Sum of paid_amount on not-yet-cleared (post-dated) Payment Entries per Supplier."""
-	filters = {
-		"docstatus": ["!=", 2],
-		"posting_date": [">", nowdate()],
-		"party_type": "Supplier",
-	}
-	if company:
-		filters["company"] = company
-
-	pdc_entries = frappe.get_all(
-		"Payment Entry",
-		filters=filters,
-		group_by="party",
-		fields=["party", "sum(paid_amount) as paid_amount"],
+	# Query Builder works the same on Frappe v15 and v16 (v16 rejects SQL
+	# function strings in get_all fields).
+	pe = frappe.qb.DocType("Payment Entry")
+	query = (
+		frappe.qb.from_(pe)
+		.select(pe.party, Sum(pe.paid_amount).as_("paid_amount"))
+		.where(pe.docstatus != 2)
+		.where(pe.posting_date > nowdate())
+		.where(pe.party_type == "Supplier")
+		.groupby(pe.party)
 	)
-	return {d.party: flt(d.paid_amount) for d in pdc_entries}
+	if company:
+		query = query.where(pe.company == company)
+
+	return {d.party: flt(d.paid_amount) for d in query.run(as_dict=True)}
 
 
 @frappe.whitelist()
